@@ -1,6 +1,6 @@
 const ArticlesListPage = () => {
     return (
-      <h1>This is the ArticleList page!</h1>
+      <h1>This is the article list page!</h1>
     );  
   }
   

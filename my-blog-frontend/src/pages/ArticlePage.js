@@ -8,7 +8,8 @@ import AddCommentForm from "../components/AddCommentForm";
 import useUser from "../hooks/useUser";
 
 const ArticlePage = () => {
-  const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [] });
+  const [articleInfo, setArticleInfo] = useState({ upvotes: 0, comments: [], canUpvote: false });
+  const { canUpvote } = articleInfo;
   const { articleId } = useParams(); 
 
   const { user, isLoading } = useUser();
@@ -21,8 +22,11 @@ const ArticlePage = () => {
       const newArticleInfo = response.data;
       setArticleInfo(newArticleInfo);
     }
-    loadArticleInfo();
-  }, [articleId, user]);
+
+    if (isLoading) {
+      loadArticleInfo();
+    }
+  },[articleId, user, isLoading]);
 
   const article = articles.find(article => article.name === articleId);
 
@@ -43,7 +47,9 @@ const ArticlePage = () => {
       <h1>{article.title}</h1>
       <div className="upvotes-section">
         {user 
-          ? <button onClick={addUpvote}>Upvote</button>
+          ? <button onClick={addUpvote}>
+              {canUpvote ? 'Upvote' : 'Already Upvoted'}
+            </button>
           : <button>Login to upvote</button>
         }
         <p>This article has {articleInfo.upvotes} upvote(s)</p>
